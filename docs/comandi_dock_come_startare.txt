@@ -1,0 +1,4 @@
+cd src
+docker run --rm -v ${PWD}:/app -w /app composer:latest require spomky-labs/otphp
+cd C:\Users\{User}\Documents\5ITIA-A\TPSIT\BiblioTech\root
+docker compose up -d 
