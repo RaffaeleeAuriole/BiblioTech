@@ -1,0 +1,99 @@
+version: '3.9'
+
+services:
+
+  web:
+    build: .
+    container_name: BiblioTech-SitoWebR
+    ports:
+      - "9000:80"
+    volumes:
+      - ./src:/var/www/html
+    depends_on:
+      - db
+      - mailpit
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - SMTP_HOST=mailpit
+      - SMTP_PORT=1025
+    networks:
+      - app-network
+
+
+  db:
+    image: mysql:8.0
+    container_name: BiblioTech-DataBaseR
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: biblioTech
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - app-network
+
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: BiblioTech-PhpMyAdminR
+    restart: always
+    ports:
+      - "9001:80"
+    environment:
+      PMA_HOST: db
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+
+  # 2FAUTH
+  2fauth:
+    image: 2fauth/2fauth
+    container_name: 2fauth-bibliotech
+    restart: always
+    ports:
+      - "9002:8000"
+    environment:
+      - APP_NAME=2FAuth-Biblioteca
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=biblioTech
+      - DB_USERNAME=root
+      - DB_PASSWORD=rootpassword
+      - APP_KEY=base64:eDdKSm+YE0kAvZbbVtrNM/6YKRYjA1fUGo7HmSrerdM=
+      - APP_URL=http://localhost:9002
+    volumes:
+      - 2fauth_data:/srv/2FAuth/storage
+    depends_on:
+      - db
+    networks:
+      - app-network
+
+
+  # MAILPIT
+  mailpit:
+    image: axllent/mailpit
+    container_name: BiblioTech-Mailpit
+    restart: always
+    ports:
+      - "8025:8025"   # Interfaccia Web Mailpit
+      - "1025:1025"   # SMTP
+    networks:
+      - app-network
+
+
+volumes:
+  db_data:
+  2fauth_data:
+
+
+networks:
+  app-network:
+    driver: bridge
+    name: bibliotech-network
