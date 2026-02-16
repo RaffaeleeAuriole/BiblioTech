@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
 
   web:
@@ -10,15 +8,16 @@ services:
     volumes:
       - ./src:/var/www/html
     depends_on:
-      - db
-      - mailpit
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
     environment:
       - APACHE_DOCUMENT_ROOT=/var/www/html
       - SMTP_HOST=mailpit
       - SMTP_PORT=1025
     networks:
       - app-network
-
 
   db:
     image: mysql:8.0
@@ -31,9 +30,14 @@ services:
       MYSQL_PASSWORD: mypassword
     volumes:
       - db_data:/var/lib/mysql
+      - ./sql/database.sql:/docker-entrypoint-initdb.d/database.sql:ro
     networks:
       - app-network
-
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-prootpassword"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -50,8 +54,7 @@ services:
     networks:
       - app-network
 
-
-  # 2FAUTH
+  # 2FAUTH - Gestione TOTP per autenticazione a due fattori
   2fauth:
     image: 2fauth/2fauth
     container_name: 2fauth-bibliotech
@@ -59,7 +62,7 @@ services:
     ports:
       - "9002:8000"
     environment:
-      - APP_NAME=2FAuth-Biblioteca
+      - APP_NAME=2FAuth-BiblioTech
       - DB_CONNECTION=mysql
       - DB_HOST=db
       - DB_PORT=3306
@@ -75,8 +78,7 @@ services:
     networks:
       - app-network
 
-
-  # MAILPIT
+  # MAILPIT - Server SMTP per testing email in sviluppo
   mailpit:
     image: axllent/mailpit
     container_name: BiblioTech-Mailpit
@@ -87,11 +89,9 @@ services:
     networks:
       - app-network
 
-
 volumes:
   db_data:
   2fauth_data:
-
 
 networks:
   app-network:
