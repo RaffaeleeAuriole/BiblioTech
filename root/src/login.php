@@ -28,7 +28,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Verifica TOTP se fornito e se l'utente ha TOTP attivo
                 if ($totp_code && !empty($user['totp_secret'])) {
                     require 'vendor/autoload.php';
-                    $totp = new \OTPHP\TOTP($user['totp_secret']);
+
+                    $totp = \OTPHP\TOTP::create($user['totp_secret']);
+                    $totp->setPeriod(30); // opzionale ma consigliato
+
                     if (!$totp->verify($totp_code)) {
                         $error = "Codice TOTP non valido.";
                     }
