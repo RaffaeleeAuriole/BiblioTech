@@ -4,10 +4,14 @@
  * Supporta sia MySQLi che PDO per compatibilità con tutto il sistema
  */
 
+// Configurazione Database
 $servername = "db";
 $username = "myuser";
 $password = "mypassword";
 $dbname = "biblioTech";
+
+// Costanti di Sistema
+define('PASSWORD_RESET_EXPIRY', 3600); // 1 ora in secondi
 
 // Connessione MySQLi (usata da alcuni file)
 $conn = new mysqli($servername, $username, $password, $dbname);
