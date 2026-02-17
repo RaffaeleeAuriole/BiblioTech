@@ -586,4 +586,4 @@ Progetto sviluppato per scopi didattici.
 *Sistema Informativo per Gestione Prestiti Librari*  
 Conforme al documento di analisi "BibliotechAnalisi__4_.docx"  
 
-© 2025 BiblioTech Project
+© 2026 BiblioTech Project
