@@ -4,7 +4,7 @@
  * Shows all available books with their availability status
  */
 
-session_start();
+
 require_once 'config.php';
 require_once 'auth.php';
 

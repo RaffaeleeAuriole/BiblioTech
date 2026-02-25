@@ -3,8 +3,9 @@
  * BiblioTech - Gestione Catalogo
  * SOLO bibliotecari: aggiunge e rimuove libri.
  */
-session_start();
+
 require_once 'config.php';
+session_start();
 require_once 'auth.php';
 
 requireLogin();
