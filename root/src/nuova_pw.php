@@ -4,7 +4,6 @@
  * Permette di impostare una nuova password tramite token di reset
  */
 
-session_start();
 require_once 'config.php';
 
 // Se già loggato, redirect

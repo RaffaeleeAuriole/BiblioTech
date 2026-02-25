@@ -4,11 +4,6 @@
  * Gestione unificata delle sessioni e dei permessi
  */
 
-// Avvia sessione se non già avviata
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
 /**
  * Richiede che l'utente sia autenticato
  * Redirect a login.php se non loggato

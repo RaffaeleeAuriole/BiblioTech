@@ -4,7 +4,7 @@
  * Genera token sicuro e invia email con link di reset
  */
 
-session_start();
+
 require_once 'config.php';
 
 // Se già loggato, redirect

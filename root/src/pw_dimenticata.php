@@ -10,7 +10,6 @@
  * - Invio email HTML tramite Mailpit
  */
 
-session_start();
 require_once 'config.php';
 require_once 'email_helper.php';
 

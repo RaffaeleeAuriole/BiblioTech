@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once "config.php";
 
 // Se già loggato, redirect a home
@@ -31,7 +30,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $totp = \OTPHP\TOTP::create($user['totp_secret']);
                     $totp->setPeriod(30); // opzionale ma consigliato
-
                     if (!$totp->verify($totp_code)) {
                         $error = "Codice TOTP non valido.";
                     }
@@ -39,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Login riuscito
                 if(!$error){
+                    session_start();
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['ruolo'] = $user['ruolo'];
                     $_SESSION['email'] = $user['email'];
